@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        img{
+            margin: 10px;
+            width: 150px;
+            height: 200px;
+            border: 1px solid black;
+            background-size: 150px 200px;
+        }
+/*
+        #movies {
+            width: 150px;
+            height: 200px;
+            border: 1px solid black;
+            background-size: 150px 200px;
+        }
+        #title {
+	text-align: center
+}
+*/
+    </style>
+</head>
+
+<body>
+    <button onclick="getData()">Get data</button>
+    <div id="movies">
+<!--
+        <div id="movies"></div>
+        <div id="title">Title</div>
+-->
+    </div>
+    <script>
+        /* 
+                        //Синхронний запит
+                                function getData(){
+                                let xhr = new XMLHttpRequest(); // створили об`єкт для запиту
+                                //
+                                xhr.open("GET", `http://www.omdbapi.com?s=batman&apikey=46180419`,false)//налаштування об'єкта для відправлення
+                                //
+                                xhr.send();
+                                console.log(JSON.parse(xhr.response))
+                                
+                                //Http GET PUT DELETE POST
+                            }*/
+        //Асинхронний запит
+        function getData() {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", `http://www.omdbapi.com?s=batman&apikey=46180419`, true)
+            xhr.send();
+            //           xhr.setRequestHeader("Content-type" "")
+            // Значення readyState
+            //            0 - метод open ще не викликався
+            //            1 - метод open викликався але send ще ні
+            //            2 - метод send викликався але відповідь ще не отримана
+            //            3 - йде приймання даних 
+            //            4 - відповідь цілком отримана
+            let data
+            xhr.onreadystatechange = function () {
+                console.log(xhr.readyState)
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status)
+                    if (xhr.status === 200) {
+                        data = JSON.parse(xhr.response)
+//                            console.log(data)
+                        data.Search.forEach(x=> putBackGround(x));
+                        
+                    }
+                }
+            }
+        }
+
+        function putBackGround(x) {
+            let img = document.createElement('img');
+            img.src = x.Poster;
+            
+            let title = document.createElement('div')
+            title.style.textAlign = 'center'
+            title.innerHTML =x.Title;
+            document.getElementById('movies').createElement('div').appendChild(img).appendChild(title)
+//let temp = document.createElement('div')          
+//temp
+//document.getElement   ById('movies').style.backgroundImage = `url(${x.Search[0].Poster})`
+//        document.getElementById('title').innerHTML = `${x.Search[0].Title}`
+        }
+    </script>
+</body>
+
+</html>
